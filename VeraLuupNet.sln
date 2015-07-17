@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeraLuupNet", "VeraLuupNet\VeraLuupNet.csproj", "{5CD3D9DB-0E40-418D-9A08-D3F2C344BF40}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VeraLuupNet.Framework", "VeraLuupNet.Framework\VeraLuupNet.Framework.csproj", "{F379CB05-4565-4A02-8FEF-5322274C2D2A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5CD3D9DB-0E40-418D-9A08-D3F2C344BF40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5CD3D9DB-0E40-418D-9A08-D3F2C344BF40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5CD3D9DB-0E40-418D-9A08-D3F2C344BF40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5CD3D9DB-0E40-418D-9A08-D3F2C344BF40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F379CB05-4565-4A02-8FEF-5322274C2D2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F379CB05-4565-4A02-8FEF-5322274C2D2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F379CB05-4565-4A02-8FEF-5322274C2D2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F379CB05-4565-4A02-8FEF-5322274C2D2A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
