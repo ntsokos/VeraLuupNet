@@ -55,6 +55,7 @@ namespace VeraLuupNet
             if (this.Vera == null)
                 this.Vera = new VeraMasterClass(new SessionHolder(), this.VeraMessagesCallBack);
 
+
             if (!this.Vera.IsInitialized)
             {
                 this.Vera.Initialize();

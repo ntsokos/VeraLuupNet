@@ -16,8 +16,6 @@ namespace VeraLuupNet.Framework
     public class VeraMasterClass
     {
 
-        public const string UserID = "";
-        public const string Password = "";
 
         public const string SHA1PASSWORD = ""; // TODO-VERALUUP
         public const string AUTHASERVER = "us-autha.mios.com"; // works ok 
@@ -28,6 +26,8 @@ namespace VeraLuupNet.Framework
 
         #region [ properties ]
 
+        private string UserID = "";
+        public string Password = "";
 
         private ISessionInterface Session { get; set; }
         private Action<MessageTypeEnum, string> MessageCallBack { get; set; }
@@ -203,8 +203,10 @@ namespace VeraLuupNet.Framework
             return luupReply;
         }
 
-        public void Initialize()
+        public void Initialize(string userID, string password)
         {
+            this.UserID = userID;
+            this.Password = password;
 
             this.RelaySessionToken = Session.GetValue("VERA_RelaySessionToken");
             this.ServerRelay = Session.GetValue("VERA_ServerRelay");
@@ -228,7 +230,6 @@ namespace VeraLuupNet.Framework
             else
                 this.AddMessage(MessageTypeEnum.Information, "Used last Vera Session");
 
-            this.Initialize();
             this.IsInitialized = true;
         }
 
