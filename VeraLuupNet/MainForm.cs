@@ -32,9 +32,15 @@ namespace VeraLuupNet
 
         #region [ event handlers ]
 
-        private void mnAbout_Click(object sender, EventArgs e)
+        private void miAbout_Click(object sender, EventArgs e)
         {
             var wnd = new AboutVeraLuupNetBox();
+            wnd.ShowDialog();
+        }
+
+        private void miSettings_Click(object sender, EventArgs e)
+        {
+            var wnd = new VeraLuupNet.Dialogs.SettingsDialog();
             wnd.ShowDialog();
         }
 
@@ -52,18 +58,30 @@ namespace VeraLuupNet
 
         private void btnRUN_Click(object sender, EventArgs e)
         {
+
             if (this.Vera == null)
                 this.Vera = new VeraMasterClass(new SessionHolder(), this.VeraMessagesCallBack);
 
-
             if (!this.Vera.IsInitialized)
             {
-                this.Vera.Initialize();
+                var username = VeraLuupNet.Properties.Settings.Default.VeraUserName;
+                var sha1password = VeraLuupNet.Properties.Settings.Default.VeraSha1Password;
+
+                if (new string[] { username, sha1password }.Any(i => string.IsNullOrEmpty(i)))
+                {
+                    MessageBox.Show("Go to settings and enter username and password", "Settings",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                this.Vera.Initialize(username, sha1password);
             }
 
             if (!this.Vera.IsInitialized)
                 return;
         }
+
+
 
     }
 }

@@ -17,7 +17,7 @@ namespace VeraLuupNet.Framework
     {
 
 
-        public const string SHA1PASSWORD = ""; // TODO-VERALUUP
+       
         public const string AUTHASERVER = "us-autha.mios.com"; // works ok 
 
         #region [ consts ]
@@ -26,8 +26,8 @@ namespace VeraLuupNet.Framework
 
         #region [ properties ]
 
-        private string UserID = "";
-        public string Password = "";
+        private string Username = "";
+        private string SHA1Password = "";
 
         private ISessionInterface Session { get; set; }
         private Action<MessageTypeEnum, string> MessageCallBack { get; set; }
@@ -63,7 +63,7 @@ namespace VeraLuupNet.Framework
             {
 
                 var authUrl = string.Format("https://{0}/autha/auth/username/{1}?SHA1Password={2}&PK_Oem=1",
-                    AUTHASERVER, UserID, SHA1PASSWORD);
+                    AUTHASERVER, Username, SHA1Password);
                 string reply = client.DownloadString(authUrl);
 
                 var authModel = new JavaScriptSerializer().Deserialize<AuthVeraModel>(reply);
@@ -203,10 +203,10 @@ namespace VeraLuupNet.Framework
             return luupReply;
         }
 
-        public void Initialize(string userID, string password)
+        public void Initialize(string userID, string sha1password)
         {
-            this.UserID = userID;
-            this.Password = password;
+            this.Username = userID;
+            this.SHA1Password = sha1password; 
 
             this.RelaySessionToken = Session.GetValue("VERA_RelaySessionToken");
             this.ServerRelay = Session.GetValue("VERA_ServerRelay");
