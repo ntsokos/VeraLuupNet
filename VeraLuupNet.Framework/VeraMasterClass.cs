@@ -17,7 +17,7 @@ namespace VeraLuupNet.Framework
     {
 
 
-       
+
         public const string AUTHASERVER = "us-autha.mios.com"; // works ok 
 
         #region [ consts ]
@@ -32,7 +32,7 @@ namespace VeraLuupNet.Framework
         private ISessionInterface Session { get; set; }
         private Action<MessageTypeEnum, string> MessageCallBack { get; set; }
 
-        public bool IsInitialized {get; set;}
+        public bool IsInitialized { get; set; }
 
         // this comes from Session if needed
         private string RelaySessionToken { get; set; }
@@ -142,55 +142,66 @@ namespace VeraLuupNet.Framework
             MessageCallBack.Invoke(messageType, message);
         }
 
-        private void CreateVeraSession()
+        private bool CreateVeraSession()
         {
-
-            var retryDeviceModel =
-                new string[] { this.SessionToken, this.Server_Device, this.PK_device, this.AuthToken, this.AuthSigToken }.All(i => !string.IsNullOrEmpty(i));
-
-            if (!retryDeviceModel) ///TODO-VERALUUP what about this? 
+            try
             {
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Authorizing");
 
-                var authModel = this.GetAuthModel();
-                var authToken = authModel.Identity;
-                var authSigToken = authModel.IdentitySignature;
+                var retryDeviceModel =
+                    new string[] { this.SessionToken, this.Server_Device, this.PK_device, this.AuthToken, this.AuthSigToken }.All(i => !string.IsNullOrEmpty(i));
 
-                var server_Account = authModel.Server_Account;
+                if (!retryDeviceModel) ///TODO-VERALUUP what about this? 
+                {
+                    this.AddMessage(MessageTypeEnum.Information, "Vera - Authorizing");
 
-                var authTokenModel = this.GetAuthTokenModel(authToken);
+                    var authModel = this.GetAuthModel();
+                    var authToken = authModel.Identity;
+                    var authSigToken = authModel.IdentitySignature;
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Authorize Session");
-                var sessionToken = this.GetSessionToken(authTokenModel.Server_Auth, authToken, authSigToken);
+                    var server_Account = authModel.Server_Account;
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Devices");
-                var devicesReply = this.GetDevicesModel(authTokenModel.Server_Auth, sessionToken, authTokenModel.PK_Account);
+                    var authTokenModel = this.GetAuthTokenModel(authToken);
 
-                var device = devicesReply.Devices.First();
+                    this.AddMessage(MessageTypeEnum.Information, "Vera - Get Authorize Session");
+                    var sessionToken = this.GetSessionToken(authTokenModel.Server_Auth, authToken, authSigToken);
 
-                this.SessionToken = sessionToken;
-                this.Server_Device = device.Server_Device;
-                this.PK_device = device.PK_Device;
-                this.AuthToken = authToken;
-                this.AuthSigToken = authSigToken;
+                    this.AddMessage(MessageTypeEnum.Information, "Vera - Get Devices");
+                    var devicesReply = this.GetDevicesModel(authTokenModel.Server_Auth, sessionToken, authTokenModel.PK_Account);
+
+                    var device = devicesReply.Devices.First();
+
+                    this.SessionToken = sessionToken;
+                    this.Server_Device = device.Server_Device;
+                    this.PK_device = device.PK_Device;
+                    this.AuthToken = authToken;
+                    this.AuthSigToken = authSigToken;
+                }
+
+                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Specific Device");
+                var deviceDevice = this.GetDeviceDeviceModel(this.SessionToken, this.Server_Device, this.PK_device);
+
+                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Device Session");
+                var relaySessionToken = this.GetSessionToken(deviceDevice.Server_Relay, this.AuthToken, this.AuthSigToken);
+                this.RelaySessionToken = relaySessionToken;
+                this.ServerRelay = deviceDevice.Server_Relay;
+
+                Session.AddValue("VERA_RelaySessionToken", this.RelaySessionToken);
+                Session.AddValue("VERA_ServerRelay", this.ServerRelay);
+                Session.AddValue("VERA_PK_device", this.PK_device);
+
+                Session.AddValue("VERA_Server_Device", this.Server_Device);
+                Session.AddValue("VERA_sessionToken", this.SessionToken);
+                Session.AddValue("VERA_AuthToken", this.AuthToken);
+                Session.AddValue("VERA_AuthSigToken", this.AuthSigToken);
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                this.AddMessage(MessageTypeEnum.Error, ex.ToString());
+                return false;
             }
 
-            this.AddMessage(MessageTypeEnum.Information, "Vera - Get Specific Device");
-            var deviceDevice = this.GetDeviceDeviceModel(this.SessionToken, this.Server_Device, this.PK_device);
-
-            this.AddMessage(MessageTypeEnum.Information, "Vera - Get Device Session");
-            var relaySessionToken = this.GetSessionToken(deviceDevice.Server_Relay, this.AuthToken, this.AuthSigToken);
-            this.RelaySessionToken = relaySessionToken;
-            this.ServerRelay = deviceDevice.Server_Relay;
-
-            Session.AddValue("VERA_RelaySessionToken", this.RelaySessionToken);
-            Session.AddValue("VERA_ServerRelay", this.ServerRelay);
-            Session.AddValue("VERA_PK_device", this.PK_device);
-
-            Session.AddValue("VERA_Server_Device", this.Server_Device);
-            Session.AddValue("VERA_sessionToken", this.SessionToken);
-            Session.AddValue("VERA_AuthToken", this.AuthToken);
-            Session.AddValue("VERA_AuthSigToken", this.AuthSigToken);
         }
 
         #endregion
@@ -206,7 +217,7 @@ namespace VeraLuupNet.Framework
         public void Initialize(string userID, string sha1password)
         {
             this.Username = userID;
-            this.SHA1Password = sha1password; 
+            this.SHA1Password = sha1password;
 
             this.RelaySessionToken = Session.GetValue("VERA_RelaySessionToken");
             this.ServerRelay = Session.GetValue("VERA_ServerRelay");
@@ -225,12 +236,10 @@ namespace VeraLuupNet.Framework
             if (needsNewVeraSession)
             {
                 this.AddMessage(MessageTypeEnum.Information, "Initializing new Vera Session");
-                this.CreateVeraSession();
+                this.IsInitialized = this.CreateVeraSession();
             }
             else
                 this.AddMessage(MessageTypeEnum.Information, "Used last Vera Session");
-
-            this.IsInitialized = true;
         }
 
         public LuupStatusReply GetLuupStatus()

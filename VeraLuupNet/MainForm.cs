@@ -79,6 +79,13 @@ namespace VeraLuupNet
 
             if (!this.Vera.IsInitialized)
                 return;
+
+            var request = this.txtRequest.Text.Trim();
+            var luupRequestStr = string.Format("data_request?id={0}", request);
+
+
+            var reply = this.Vera.LuupRequest(luupRequestStr);
+            this.txtVeraMessages.AppendText(reply);
         }
 
 
