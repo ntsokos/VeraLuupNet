@@ -79,17 +79,17 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(12, 42);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(81, 13);
+            this.label3.Size = new System.Drawing.Size(89, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Luup Command";
+            this.label3.Text = "data_request?id=";
             // 
             // txtRequest
             // 
             this.txtRequest.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtRequest.Location = new System.Drawing.Point(99, 40);
+            this.txtRequest.Location = new System.Drawing.Point(107, 40);
             this.txtRequest.Name = "txtRequest";
-            this.txtRequest.Size = new System.Drawing.Size(374, 20);
+            this.txtRequest.Size = new System.Drawing.Size(366, 20);
             this.txtRequest.TabIndex = 8;
             this.txtRequest.Text = "status";
             // 

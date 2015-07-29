@@ -109,20 +109,41 @@ namespace VeraLuupNet.Framework
             }
         }
 
-        private DeviceDeviceModel GetDeviceDeviceModel(string sessionToken, string service_device, string pk_device)
+
+        private DeviceDeviceModel GetDeviceDeviceModel(string sessionToken, string[] service_devices, string pk_device)
         {
-            using (WebClient client = new WebClient())
+            var exceptionsList = new List<Exception>();
+
+
+            foreach (var deviceUrl in service_devices) // Try both URLS. one of the two has the session, the other fails
             {
-                this.AddMessage(MessageTypeEnum.Information, string.Format("Vera - Debug: service device: {0}", service_device));
+                try
+                {
+                    using (WebClient client = new WebClient())
+                    {
+                        this.AddMessage(MessageTypeEnum.Information, string.Format("Vera - Try service device: {0}", deviceUrl));
 
-                client.Headers.Add("MMSSession", sessionToken);
+                        client.Headers.Add("MMSSession", sessionToken);
 
-                var url = string.Format("https://{0}/device/device/device/{1}", service_device, pk_device);
-                var reply = client.DownloadString(url);
+                        var url = string.Format("https://{0}/device/device/device/{1}", deviceUrl, pk_device);
+                        var reply = client.DownloadString(url);
 
-                var deviceDeviceModel = new JavaScriptSerializer().Deserialize<DeviceDeviceModel>(reply);
-                return deviceDeviceModel;
+                        var ret = new JavaScriptSerializer().Deserialize<DeviceDeviceModel>(reply);
+                        return ret;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    exceptionsList.Add(ex);
+                }
             }
+
+
+            if (exceptionsList.Any())
+                throw exceptionsList.Last(); // if nothing found, fire last error;
+
+            return null;
+
         }
 
         private string LuupRequest(string sessionToken, string serverRelay, string pk_device, string request)
@@ -147,38 +168,33 @@ namespace VeraLuupNet.Framework
             try
             {
 
-                var retryDeviceModel =
-                    new string[] { this.SessionToken, this.Server_Device, this.PK_device, this.AuthToken, this.AuthSigToken }.All(i => !string.IsNullOrEmpty(i));
+                this.AddMessage(MessageTypeEnum.Information, "Vera - Authorizing");
 
-                if (!retryDeviceModel) ///TODO-VERALUUP what about this? 
-                {
-                    this.AddMessage(MessageTypeEnum.Information, "Vera - Authorizing");
+                var authModel = this.GetAuthModel();
 
-                    var authModel = this.GetAuthModel();
-                    var authToken = authModel.Identity;
-                    var authSigToken = authModel.IdentitySignature;
 
-                    var server_Account = authModel.Server_Account;
+                var authToken = authModel.Identity;
+                var authSigToken = authModel.IdentitySignature;
 
-                    var authTokenModel = this.GetAuthTokenModel(authToken);
+                var authTokenModel = this.GetAuthTokenModel(authToken);
 
-                    this.AddMessage(MessageTypeEnum.Information, "Vera - Get Authorize Session");
-                    var sessionToken = this.GetSessionToken(authTokenModel.Server_Auth, authToken, authSigToken);
+                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Authorize Session");
+                var sessionToken = this.GetSessionToken(authTokenModel.Server_Auth, authToken, authSigToken);
 
-                    this.AddMessage(MessageTypeEnum.Information, "Vera - Get Devices");
-                    var devicesReply = this.GetDevicesModel(authTokenModel.Server_Auth, sessionToken, authTokenModel.PK_Account);
+                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Devices");
+                var devicesReply = this.GetDevicesModel(authTokenModel.Server_Auth, sessionToken, authTokenModel.PK_Account);
 
-                    var device = devicesReply.Devices.First();
+                var device = devicesReply.Devices.First();
 
-                    this.SessionToken = sessionToken;
-                    this.Server_Device = device.Server_Device;
-                    this.PK_device = device.PK_Device;
-                    this.AuthToken = authToken;
-                    this.AuthSigToken = authSigToken;
-                }
+                this.SessionToken = sessionToken;
+                this.PK_device = device.PK_Device;
+                this.AuthToken = authToken;
+                this.AuthSigToken = authSigToken;
+
 
                 this.AddMessage(MessageTypeEnum.Information, "Vera - Get Specific Device");
-                var deviceDevice = this.GetDeviceDeviceModel(this.SessionToken, this.Server_Device, this.PK_device);
+                var serverDeviceURLs = new string[] { device.Server_Device, device.Server_Device_Alt };
+                var deviceDevice = this.GetDeviceDeviceModel(this.SessionToken, serverDeviceURLs, this.PK_device);
 
                 this.AddMessage(MessageTypeEnum.Information, "Vera - Get Device Session");
                 var relaySessionToken = this.GetSessionToken(deviceDevice.Server_Relay, this.AuthToken, this.AuthSigToken);
@@ -189,7 +205,6 @@ namespace VeraLuupNet.Framework
                 Session.AddValue("VERA_ServerRelay", this.ServerRelay);
                 Session.AddValue("VERA_PK_device", this.PK_device);
 
-                Session.AddValue("VERA_Server_Device", this.Server_Device);
                 Session.AddValue("VERA_sessionToken", this.SessionToken);
                 Session.AddValue("VERA_AuthToken", this.AuthToken);
                 Session.AddValue("VERA_AuthSigToken", this.AuthSigToken);
@@ -223,7 +238,6 @@ namespace VeraLuupNet.Framework
             this.ServerRelay = Session.GetValue("VERA_ServerRelay");
             this.PK_device = Session.GetValue("VERA_PK_device");
 
-            this.Server_Device = Session.GetValue("VERA_Server_Device");
             this.SessionToken = Session.GetValue("VERA_sessionToken");
             this.AuthToken = Session.GetValue("VERA_AuthToken");
             this.AuthSigToken = Session.GetValue("VERA_AuthSigToken");

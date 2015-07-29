@@ -33,9 +33,18 @@ namespace VeraLuupNet.Dialogs
 
         private void btnOK_Click(object sender, EventArgs e)
         {
-            if (this.Validate())
-                this.SaveSettings();
+            if (!this.Validate())
+                return;
 
+            if (!this.SaveSettings())
+                return;
+
+            this.DialogResult = System.Windows.Forms.DialogResult.OK;
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
         }
 
         #endregion
@@ -63,9 +72,7 @@ namespace VeraLuupNet.Dialogs
             return ret;
         }
 
-        #endregion
-
-        private void SaveSettings()
+        private bool SaveSettings()
         {
 
             VeraLuupNet.Properties.Settings.Default.VeraUserName = this.txtUsername.Text.Trim();
@@ -73,8 +80,8 @@ namespace VeraLuupNet.Dialogs
                 this.Hash(this.txtUsername.Text.Trim(), this.txtPassword.Text.Trim(), PASS_SEED);
 
             VeraLuupNet.Properties.Settings.Default.Save();
-            this.DialogResult = System.Windows.Forms.DialogResult.OK;
 
+            return true;
         }
 
         private string Hash(string username, string password, string salt)
@@ -86,9 +93,11 @@ namespace VeraLuupNet.Dialogs
             var ret = BitConverter.ToString(retBytes).Replace("-", "");
 
 
-
             return ret;
 
         }
+
+        #endregion
+
     }
 }
