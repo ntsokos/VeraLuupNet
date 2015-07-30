@@ -118,8 +118,6 @@ namespace VeraLuupNet.Framework
 
         private DeviceDeviceModel GetDeviceDeviceModel(string sessionToken, string deviceUrl, string pk_device)
         {
-            var exceptionsList = new List<Exception>();
-
             using (WebClient client = new WebClient())
             {
 
