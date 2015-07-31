@@ -15,9 +15,6 @@ namespace VeraLuupNet.Framework
 {
     public class VeraMasterClass
     {
-
-
-
         public const string AUTHASERVER = "us-autha.mios.com"; // works ok 
 
         #region [ consts ]
@@ -64,7 +61,6 @@ namespace VeraLuupNet.Framework
                     AUTHASERVER, Username, SHA1Password);
 
                 Debug.WriteLine(authUrl);
-
                 string reply = client.DownloadString(authUrl);
 
                 var authModel = new JavaScriptSerializer().Deserialize<AuthVeraModel>(reply);
@@ -92,7 +88,6 @@ namespace VeraLuupNet.Framework
                 var url = string.Format("https://{0}/info/session/token", server);
 
                 Debug.WriteLine(url);
-
                 var reply = client.DownloadString(url);
 
 
@@ -107,8 +102,8 @@ namespace VeraLuupNet.Framework
                 client.Headers.Add("MMSSession", sessionToken);
 
                 var url = string.Format("https://{0}/account/account/account/{1}/devices", sessionTokenServer, pk_account);
-                Debug.WriteLine(url);
 
+                Debug.WriteLine(url);
                 var reply = client.DownloadString(url);
 
                 var devicesModel = new JavaScriptSerializer().Deserialize<DevicesReplyModel>(reply);
@@ -126,7 +121,6 @@ namespace VeraLuupNet.Framework
                 var url = string.Format("https://{0}/device/device/device/{1}", deviceUrl, pk_device);
 
                 Debug.WriteLine(url);
-
                 var reply = client.DownloadString(url);
 
                 var ret = new JavaScriptSerializer().Deserialize<DeviceDeviceModel>(reply);
@@ -140,6 +134,7 @@ namespace VeraLuupNet.Framework
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add("MMSSession", sessionToken);
+                
                 var url = string.Format("https://{0}/relay/relay/relay/device/{1}/port_3480/{2}", serverRelay, pk_device, request);
                 var reply = client.DownloadString(url);
 
@@ -165,23 +160,25 @@ namespace VeraLuupNet.Framework
 
                 var authTokenModel = this.DeserializeAuthTokenModel(authToken);
 
-                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Authorize Session");
-                var sessionToken = this.GetSessionToken(authTokenModel.Server_Auth, authToken, authSigToken);
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Server Account Session");
+                var serverAccountSession = this.GetSessionToken(authModel.Server_Account, authToken, authSigToken);
 
-                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Devices");
-                var devicesReply = this.GetDevicesModel(authTokenModel.Server_Auth, sessionToken, authTokenModel.PK_Account);
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Account Devices");
+                var devicesReply = this.GetDevicesModel(authModel.Server_Account, serverAccountSession, authTokenModel.PK_Account);
 
                 var device = devicesReply.Devices.First();
                 this.PK_device = device.PK_Device;
 
-                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Device Session");
-                var deviceSessionToken = this.GetSessionToken(device.Server_Device, authToken, authSigToken);
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Server Device Session");
+                var serverDeviceSession = this.GetSessionToken(device.Server_Device, authToken, authSigToken); 
 
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Specific Device");
-                var deviceDevice = this.GetDeviceDeviceModel(deviceSessionToken, device.Server_Device, this.PK_device);
+                var deviceDevice = this.GetDeviceDeviceModel(serverDeviceSession, device.Server_Device, this.PK_device);
+
 
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Relay Session");
                 var relaySessionToken = this.GetSessionToken(deviceDevice.Server_Relay, authToken, authSigToken);
+
                 this.RelaySessionToken = relaySessionToken;
                 this.ServerRelay = deviceDevice.Server_Relay;
 
