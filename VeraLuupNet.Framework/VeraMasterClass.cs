@@ -156,7 +156,7 @@ namespace VeraLuupNet.Framework
         {
             try
             {
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Authorizing");
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Authorizing");
 
                 var authModel = this.GetAuthModel();
 
@@ -165,22 +165,22 @@ namespace VeraLuupNet.Framework
 
                 var authTokenModel = this.DeserializeAuthTokenModel(authToken);
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Authorize Session");
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Authorize Session");
                 var sessionToken = this.GetSessionToken(authTokenModel.Server_Auth, authToken, authSigToken);
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Devices");
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Devices");
                 var devicesReply = this.GetDevicesModel(authTokenModel.Server_Auth, sessionToken, authTokenModel.PK_Account);
 
                 var device = devicesReply.Devices.First();
                 this.PK_device = device.PK_Device;
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Device Session");
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Device Session");
                 var deviceSessionToken = this.GetSessionToken(device.Server_Device, authToken, authSigToken);
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Specific Device");
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Specific Device");
                 var deviceDevice = this.GetDeviceDeviceModel(deviceSessionToken, device.Server_Device, this.PK_device);
 
-                this.AddMessage(MessageTypeEnum.Information, "Vera - Get Relay Session");
+                this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Relay Session");
                 var relaySessionToken = this.GetSessionToken(deviceDevice.Server_Relay, authToken, authSigToken);
                 this.RelaySessionToken = relaySessionToken;
                 this.ServerRelay = deviceDevice.Server_Relay;
