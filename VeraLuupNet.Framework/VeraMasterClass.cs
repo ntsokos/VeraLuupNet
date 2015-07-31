@@ -10,6 +10,7 @@ using System.Web.Script.Serialization;
 using VeraLuupNet.Framework.Enums;
 using VeraLuupNet.Framework.Interfaces;
 using VeraLuupNet.Framework.JsonModels;
+using VeraLuupNet.Framework.Helpers;
 
 namespace VeraLuupNet.Framework
 {
@@ -160,21 +161,20 @@ namespace VeraLuupNet.Framework
 
                 var authTokenModel = this.DeserializeAuthTokenModel(authToken);
 
+                var serverAccountUrl = FrameworkHelpers.GetRandomUrl(authModel.Server_Account, authModel.Server_Account_Alt);
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Server Account Session");
-                var serverAccountSession = this.GetSessionToken(authModel.Server_Account, authToken, authSigToken);
-
+                var serverAccountSession = this.GetSessionToken(serverAccountUrl, authToken, authSigToken);
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Account Devices");
-                var devicesReply = this.GetDevicesModel(authModel.Server_Account, serverAccountSession, authTokenModel.PK_Account);
+                var devicesReply = this.GetDevicesModel(serverAccountUrl, serverAccountSession, authTokenModel.PK_Account);
 
                 var device = devicesReply.Devices.First();
                 this.PK_device = device.PK_Device;
 
+                var serverDeviceUrl = FrameworkHelpers.GetRandomUrl(device.Server_Device, device.Server_Device_Alt);
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Server Device Session");
-                var serverDeviceSession = this.GetSessionToken(device.Server_Device, authToken, authSigToken); 
-
+                var serverDeviceSession = this.GetSessionToken(serverDeviceUrl, authToken, authSigToken); 
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Specific Device");
-                var deviceDevice = this.GetDeviceDeviceModel(serverDeviceSession, device.Server_Device, this.PK_device);
-
+                var deviceDevice = this.GetDeviceDeviceModel(serverDeviceSession, serverDeviceUrl, this.PK_device);
 
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Relay Session");
                 var relaySessionToken = this.GetSessionToken(deviceDevice.Server_Relay, authToken, authSigToken);

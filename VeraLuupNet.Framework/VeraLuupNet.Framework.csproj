@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="Enums\MessageTypeEnum.cs" />
     <Compile Include="Enums\VeraEnums.cs" />
+    <Compile Include="Helpers\FrameworkHelpers.cs" />
     <Compile Include="Interfaces\ISessionInterface.cs" />
     <Compile Include="JsonModels\AuthModel.cs" />
     <Compile Include="JsonModels\AuthTokenModel.cs" />
