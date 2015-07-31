@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VeraLuupNet.Framework;
 using VeraLuupNet.Framework.Enums;
+using VeraLuupNet.Helpers;
 using VeraLuupNet.Utils;
+using VeraLuupNet.Extentions;
 
 namespace VeraLuupNet
 {
@@ -50,8 +52,9 @@ namespace VeraLuupNet
 
         private void VeraMessagesCallBack(MessageTypeEnum messageType, string message)
         {
-            var addText = string.Format("{0} - {1}\r\n", messageType, message);
-            this.txtVeraMessages.AppendText(addText);
+            //var addText = string.Format("{0} - {1}\r\n", messageType, message);
+            //this.txtVeraMessages.AppendText(addText);
+            this.flowLayoutPanel1.AddMessage(messageType, message);
         }
 
         #endregion
@@ -85,10 +88,15 @@ namespace VeraLuupNet
 
 
             var reply = this.Vera.LuupRequest(luupRequestStr);
+
             this.txtVeraMessages.AppendText(reply);
+            this.flowLayoutPanel1.AddVeraReply(reply);
         }
 
-
+        private void button1_Click(object sender, EventArgs e)
+        {
+            flowLayoutPanel1.AddText("ena dio tria tessera");
+        }
 
     }
 }

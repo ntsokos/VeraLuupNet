@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,13 +11,24 @@ namespace VeraLuupNet.Helpers
     {
         public static bool IsJson(string str)
         {
+            try
+            {
+                dynamic parsedJson = JsonConvert.DeserializeObject(str);
+                return (parsedJson != null); 
+            }
+            catch (Exception)
+            {
+                return false; 
+            }
 
-            throw new NotImplementedException();
+            return false;
         }
 
         public static string FormatJSON(string jsonStr)
         {
-            throw new NotImplementedException();
+            dynamic parsedJson = JsonConvert.DeserializeObject(jsonStr);
+            var ret = JsonConvert.SerializeObject(parsedJson, Formatting.Indented);
+            return ret;
         }
     }
 }
