@@ -4,21 +4,15 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using VeraLuupNet.Framework.Helpers;
 
 namespace VeraLuupNet.Dialogs
 {
     public partial class SettingsDialog : Form
     {
-
-        #region [ consts ]
-
-        private const string PASS_SEED = "oZ7QE6LcLJp6fiWzdqZc";
-
-        #endregion
 
         #region [ constructor ]
 
@@ -77,24 +71,11 @@ namespace VeraLuupNet.Dialogs
 
             VeraLuupNet.Properties.Settings.Default.VeraUserName = this.txtUsername.Text.Trim();
             VeraLuupNet.Properties.Settings.Default.VeraSha1Password =
-                this.Hash(this.txtUsername.Text.Trim(), this.txtPassword.Text.Trim(), PASS_SEED);
+                FrameworkHelpers.GetHashedPassword(this.txtUsername.Text.Trim(), this.txtPassword.Text.Trim());
 
             VeraLuupNet.Properties.Settings.Default.Save();
 
             return true;
-        }
-
-        private string Hash(string username, string password, string salt)
-        {
-            var finalString = username.ToLower() + password + salt;
-            var finalSha1PassBytes = Encoding.UTF8.GetBytes(finalString);
-            var retBytes = new SHA1Cng().ComputeHash(finalSha1PassBytes);
-
-            var ret = BitConverter.ToString(retBytes).Replace("-", "");
-
-
-            return ret;
-
         }
 
         #endregion
