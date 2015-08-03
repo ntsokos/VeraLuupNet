@@ -70,6 +70,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TestUI.Designer.cs">
+      <DependentUpon>TestUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\SessionHolder.cs" />
     <EmbeddedResource Include="AboutVeraLuupNetBox.resx">
       <DependentUpon>AboutVeraLuupNetBox.cs</DependentUpon>
@@ -89,6 +95,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="TestUI.resx">
+      <DependentUpon>TestUI.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

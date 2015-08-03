@@ -34,9 +34,7 @@
             this.btnRUN = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtRequest = new System.Windows.Forms.TextBox();
-            this.txtVeraMessages = new System.Windows.Forms.TextBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -95,45 +93,27 @@
             this.txtRequest.TabIndex = 8;
             this.txtRequest.Text = "status";
             // 
-            // txtVeraMessages
-            // 
-            this.txtVeraMessages.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtVeraMessages.Location = new System.Drawing.Point(12, 70);
-            this.txtVeraMessages.Multiline = true;
-            this.txtVeraMessages.Name = "txtVeraMessages";
-            this.txtVeraMessages.Size = new System.Drawing.Size(207, 406);
-            this.txtVeraMessages.TabIndex = 9;
-            // 
             // flowLayoutPanel1
             // 
             this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(337, 70);
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Window;
+            this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(15, 70);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(365, 406);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(675, 406);
             this.flowLayoutPanel1.TabIndex = 10;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(234, 79);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 11;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.flowLayoutPanel1.WrapContents = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(702, 488);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.flowLayoutPanel1);
-            this.Controls.Add(this.txtVeraMessages);
             this.Controls.Add(this.txtRequest);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnRUN);
@@ -155,10 +135,8 @@
         private System.Windows.Forms.Button btnRUN;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtRequest;
-        private System.Windows.Forms.TextBox txtVeraMessages;
         private System.Windows.Forms.ToolStripMenuItem miSettings;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
-        private System.Windows.Forms.Button button1;
     }
 }
 
