@@ -39,6 +39,8 @@ namespace VeraLuupNet.Framework
 
         private string Server_Device { get; set; }
 
+        private bool TryToRelogin { get; set; } 
+
         #endregion
 
         #region [ constructor ]
@@ -135,11 +137,24 @@ namespace VeraLuupNet.Framework
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add("MMSSession", sessionToken);
-                
-                var url = string.Format("https://{0}/relay/relay/relay/device/{1}/port_3480/{2}", serverRelay, pk_device, request);
-                var reply = client.DownloadString(url);
 
-                return reply;
+                var url = string.Format("https://{0}/relay/relay/relay/device/{1}/port_3480/{2}", serverRelay, pk_device, request);
+
+                try
+                {
+                    var reply = client.DownloadString(url);
+                    return reply;
+                }
+                catch (Exception up)
+                {
+                    var ret = this.ReloginOnceAndRetryLuupRequest(request);
+                    if (!string.IsNullOrEmpty(ret))
+                        return ret;
+
+                    throw up;
+                }
+
+                
             }
         }
 
@@ -172,7 +187,7 @@ namespace VeraLuupNet.Framework
 
                 var serverDeviceUrl = FrameworkHelpers.GetRandomUrl(device.Server_Device, device.Server_Device_Alt);
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Server Device Session");
-                var serverDeviceSession = this.GetSessionToken(serverDeviceUrl, authToken, authSigToken); 
+                var serverDeviceSession = this.GetSessionToken(serverDeviceUrl, authToken, authSigToken);
                 this.AddMessage(MessageTypeEnum.Debug, "Vera - Get Specific Device");
                 var deviceDevice = this.GetDeviceDeviceModel(serverDeviceSession, serverDeviceUrl, this.PK_device);
 
@@ -192,6 +207,32 @@ namespace VeraLuupNet.Framework
             {
                 this.AddMessage(MessageTypeEnum.Error, ex.ToString());
                 return false;
+            }
+
+        }
+
+        private string ReloginOnceAndRetryLuupRequest(string request)
+        {
+            if (!this.IsInitialized)
+                return string.Empty; // this was never initialized... so do not bother 
+            if (this.TryToRelogin)
+                return string.Empty; // already tried to relogin once.. do not bother
+
+            this.TryToRelogin = true;
+            try
+            {
+                this.AddMessage(MessageTypeEnum.Information, "Session Might have expired. Trying to Relogin");
+                if (!this.CreateVeraSession())
+                    return string.Empty;
+
+                var ret = this.LuupRequest(request);
+                return ret;
+
+            }
+            finally
+            {
+
+                this.TryToRelogin = false;
             }
 
         }
@@ -237,5 +278,6 @@ namespace VeraLuupNet.Framework
         }
 
         #endregion
+
     }
 }
