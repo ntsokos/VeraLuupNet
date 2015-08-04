@@ -13,3 +13,6 @@ Remotely login and make Luup calls to a Vera™ home controller
 ## Implementation Details
 * Developed using Winforms and C# .NET 4.5
 * Based on RichardTSchaefer *"notes on remote access for UI6 Vera"* forum [thread](http://forum.micasaverde.com/index.php/topic,24942.0.html)
+
+## Documentation 
+* Information on how to Integrate VeraLuupNet with your project on [this link](https://github.com/entrodus/VeraLuupNet/wiki/VeraLuupNet-Integration)
