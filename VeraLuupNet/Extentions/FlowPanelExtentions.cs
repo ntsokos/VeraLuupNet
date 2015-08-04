@@ -38,6 +38,7 @@ namespace VeraLuupNet.Extentions
 
             source.Controls.Add(panel);
             Application.DoEvents();
+            source.Focus();
         }
 
         public static void AddVeraReply(this FlowLayoutPanel source, string veraReply)
@@ -62,16 +63,12 @@ namespace VeraLuupNet.Extentions
             if (VeraLuupNetHelpers.IsJson(finalStr))
                 finalStr = VeraLuupNetHelpers.FormatJSON(finalStr);
 
-            var txt = new TextBox();
-            txt.ReadOnly = false;
-            txt.Multiline = true;
-            txt.Text = finalStr;
-            txt.Margin = new Padding(10, 5, 10, 5);
-            txt.Font = new Font("Microsoft Sans Serif", 10f);
-            txt.BorderStyle = BorderStyle.None;
-            txt.Height = (txt.Font.Height + 2) * txt.Lines.Count();
-            txt.Width = source.Width - 40;
-            panel.Controls.Add(txt);
+            var lbl2 = new Label();
+            lbl2.AutoSize = true;
+            lbl2.Margin = new Padding(10, 5, 10, 5);
+            lbl2.Text = finalStr;
+            lbl2.Font = new Font("Microsoft Sans Serif", 10f);
+            panel.Controls.Add(lbl2);
 
             var myToolTip = new System.Windows.Forms.ToolTip
             {
@@ -81,17 +78,18 @@ namespace VeraLuupNet.Extentions
                 ReshowDelay = 5000
             };
 
-            myToolTip.SetToolTip(txt, "Double click to copy to clipboard");
-            txt.DoubleClick +=
+            myToolTip.SetToolTip(lbl2, "Double click to copy to clipboard");
+            lbl2.DoubleClick +=
                 (sender, e) =>
                 {
-                    System.Windows.Forms.Clipboard.SetText((sender as TextBox).Text);
+                    System.Windows.Forms.Clipboard.SetText((sender as Label).Text);
                     MessageBox.Show("Copied to clipboard");
                 };
 
             source.Controls.Add(panel);
 
             Application.DoEvents();
+            source.Focus();
         }
 
         public static void AddMessage(this FlowLayoutPanel source, MessageTypeEnum messageType, string message)
@@ -120,6 +118,7 @@ namespace VeraLuupNet.Extentions
 
             source.Controls.Add(panel);
             Application.DoEvents();
+            source.Focus();
         }
 
         private static Color ToColor(this MessageTypeEnum source)
