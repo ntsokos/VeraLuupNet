@@ -34,7 +34,7 @@
             this.btnRUN = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtRequest = new System.Windows.Forms.TextBox();
-            this.txtVeraMessages = new System.Windows.Forms.TextBox();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -45,7 +45,7 @@
             this.miAbout});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(566, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(702, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -66,7 +66,7 @@
             // btnRUN
             // 
             this.btnRUN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRUN.Location = new System.Drawing.Point(479, 38);
+            this.btnRUN.Location = new System.Drawing.Point(615, 38);
             this.btnRUN.Name = "btnRUN";
             this.btnRUN.Size = new System.Drawing.Size(75, 23);
             this.btnRUN.TabIndex = 2;
@@ -89,27 +89,31 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRequest.Location = new System.Drawing.Point(107, 40);
             this.txtRequest.Name = "txtRequest";
-            this.txtRequest.Size = new System.Drawing.Size(366, 20);
+            this.txtRequest.Size = new System.Drawing.Size(502, 20);
             this.txtRequest.TabIndex = 8;
             this.txtRequest.Text = "status";
             // 
-            // txtVeraMessages
+            // flowLayoutPanel1
             // 
-            this.txtVeraMessages.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.flowLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtVeraMessages.Location = new System.Drawing.Point(12, 70);
-            this.txtVeraMessages.Multiline = true;
-            this.txtVeraMessages.Name = "txtVeraMessages";
-            this.txtVeraMessages.Size = new System.Drawing.Size(542, 291);
-            this.txtVeraMessages.TabIndex = 9;
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Window;
+            this.flowLayoutPanel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.BottomUp;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(15, 70);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(675, 406);
+            this.flowLayoutPanel1.TabIndex = 10;
+            this.flowLayoutPanel1.WrapContents = false;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(566, 373);
-            this.Controls.Add(this.txtVeraMessages);
+            this.ClientSize = new System.Drawing.Size(702, 488);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.txtRequest);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnRUN);
@@ -131,8 +135,8 @@
         private System.Windows.Forms.Button btnRUN;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtRequest;
-        private System.Windows.Forms.TextBox txtVeraMessages;
         private System.Windows.Forms.ToolStripMenuItem miSettings;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
     }
 }
 

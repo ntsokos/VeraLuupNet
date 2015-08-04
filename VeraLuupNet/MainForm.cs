@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VeraLuupNet.Framework;
 using VeraLuupNet.Framework.Enums;
+using VeraLuupNet.Helpers;
 using VeraLuupNet.Utils;
+using VeraLuupNet.Extentions;
+using System.IO;
 
 namespace VeraLuupNet
 {
@@ -44,21 +47,38 @@ namespace VeraLuupNet
             wnd.ShowDialog();
         }
 
+        private void btnRUN_Click(object sender, EventArgs e)
+        {
+            this.CheckVera();
+            if (!this.Vera.IsInitialized)
+                return;
+
+            var request = this.txtRequest.Text.Trim();
+            var luupRequestStr = string.Format("data_request?id={0}", request);
+
+            this.flowLayoutPanel1.AddVeraRequest(luupRequestStr);
+
+            var reply = this.Vera.LuupRequest(luupRequestStr);
+
+            this.flowLayoutPanel1.AddVeraReply(reply);
+        }
+
         #endregion
 
         #region [ callbacks ]
 
         private void VeraMessagesCallBack(MessageTypeEnum messageType, string message)
         {
-            var addText = string.Format("{0} - {1}\r\n", messageType, message);
-            this.txtVeraMessages.AppendText(addText);
+            //var addText = string.Format("{0} - {1}\r\n", messageType, message);
+            this.flowLayoutPanel1.AddMessage(messageType, message);
         }
 
         #endregion
 
-        private void btnRUN_Click(object sender, EventArgs e)
-        {
+        #region [ helpers ]
 
+        private void CheckVera()
+        {
             if (this.Vera == null)
                 this.Vera = new VeraMasterClass(new SessionHolder(), this.VeraMessagesCallBack);
 
@@ -77,18 +97,20 @@ namespace VeraLuupNet
                 this.Vera.Initialize(username, sha1password);
             }
 
-            if (!this.Vera.IsInitialized)
-                return;
-
-            var request = this.txtRequest.Text.Trim();
-            var luupRequestStr = string.Format("data_request?id={0}", request);
-
-
-            var reply = this.Vera.LuupRequest(luupRequestStr);
-            this.txtVeraMessages.AppendText(reply);
         }
 
+        #endregion
 
+        private void button1_Click(object sender, EventArgs e)
+        {
 
+            flowLayoutPanel1.AddMessage(MessageTypeEnum.Debug, "Debug Message");
+
+            var jsontest = @"D:\nikos\SourceTFSOnline\EntrodusIOTProject\EntroIOT.Web\EntroIOT.Web\VERA\ExampleFiles\Luup_Status.json";
+            var reply = File.ReadAllText(jsontest);
+            flowLayoutPanel1.AddVeraReply(reply);
+
+        }
+        
     }
 }
