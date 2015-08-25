@@ -1,10 +1,10 @@
-# VeraLuupNet - Vera C#
-Use c# to remotely login and make Luup calls to a Vera™ home controller
+# VeraLuupNet - Vera C# 
+Use c# to remotely login and make Luup calls to a Veraâ„¢ home controller
 
 ## Prerequisites
 * Visual Studio 2013
-* Ownership of a Vera™ home controller (tested with VeraLite) 
-* Working Vera™ account (test it [here](https://home.getvera.com/users/login)) 
+* Ownership of a Veraâ„¢ home controller (tested with VeraLite) 
+* Working Veraâ„¢ account (test it [here](https://home.getvera.com/users/login)) 
 
 ## Luup Information 
 * [Luup Introduction](http://wiki.micasaverde.com/index.php/Luup_Intro)
